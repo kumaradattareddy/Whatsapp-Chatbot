@@ -1,6 +1,5 @@
 # 1) Use a lightweight OpenJDK 17 image
-FROM eclipse-temurin:17-jdk-alpine
-
+FROM eclipse-temurin:24-jdk
 # 2) Create and switch to /app
 WORKDIR /app
 
