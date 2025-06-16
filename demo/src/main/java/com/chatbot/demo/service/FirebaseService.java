@@ -15,6 +15,7 @@ public class FirebaseService {
      * Load a session by phone number (doc ID).
      * Returns null if none exists.
      */
+
     public UserSession loadSession(String phoneNumber) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
         var snap = db.collection(COLLECTION)
@@ -27,6 +28,7 @@ public class FirebaseService {
     /**
      * Save or update a session document keyed by phoneNumber.
      */
+    
     public void saveSession(UserSession session) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
         db.collection(COLLECTION)

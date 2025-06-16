@@ -28,15 +28,16 @@ public class WebhookController {
 
     /**
      * GET /webhook
-     * Used by Meta to verify your callback URL.
+     * Verifies the webhook subscription with WhatsApp.
+     * Responds with the challenge if verification is successful.
      */
+
     @GetMapping
     public ResponseEntity<String> verifyWebhook(
         @RequestParam(name = "hub.mode", required = false) String mode,
         @RequestParam(name = "hub.verify_token", required = false) String token,
         @RequestParam(name = "hub.challenge", required = false) String challenge
     ) {
-        // Only echo back the challenge if verify_token matches
         if ("subscribe".equals(mode) && VERIFY_TOKEN.equals(token)) {
             return ResponseEntity.ok(challenge);
         } else {
@@ -49,6 +50,7 @@ public class WebhookController {
      * POST /webhook
      * Receives incoming WhatsApp messages, persists sessions, and replies.
      */
+    
     @PostMapping
     public ResponseEntity<String> receiveMessage(@RequestBody Map<String, Object> payload) throws Exception {
         // 1) Extract sender & message text

@@ -4,22 +4,12 @@ import java.util.Map;
 
 public class UserSession {
 
-    /** 
-     * The user’s phone number (we’ll use it as the document ID). 
-     */
     private String phoneNumber;
-
-    /**
-     * Current state of the conversation (e.g., “ASK_NAME”, “GREETED”).
-     */
+    
     private String state;
 
-    /**
-     * Any contextual data you need (e.g., name they provided).
-     */
     private Map<String, Object> context;
-
-    // Constructors
+   
     public UserSession() {}
 
     public UserSession(String phoneNumber, String state, Map<String, Object> context) {
@@ -28,7 +18,6 @@ public class UserSession {
         this.context     = context;
     }
 
-    // Getters & setters
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
