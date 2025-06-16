@@ -1,6 +1,8 @@
 package com.chatbot.demo.config;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,22 +15,26 @@ import com.google.firebase.FirebaseOptions;
 @Configuration
 public class FirebaseAdminConfig {
 
-    /**
-     * Initializes the FirebaseApp using the service-account JSON
-     * placed in src/main/resources/firebase-service-account.json.
-     */
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        // 1) Load the JSON file from the classpath
-        ClassPathResource resource = 
-            new ClassPathResource("firebase-service-account.json");
+        FirebaseOptions options;
 
-        // 2) Build FirebaseOptions with credentials
-        FirebaseOptions options = FirebaseOptions.builder()
-            .setCredentials(GoogleCredentials.fromStream(resource.getInputStream()))
-            .build();
+        String jsonEnv = System.getenv("FIREBASE_CREDENTIALS_JSON");
+        if (jsonEnv != null && !jsonEnv.isBlank()) {
+            // 1) Load credentials from the environment variable
+            ByteArrayInputStream creds = new ByteArrayInputStream(jsonEnv.getBytes(StandardCharsets.UTF_8));
+            options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(creds))
+                    .build();
+        } else {
+            // 2) Fallback to classpath (local dev)
+            ClassPathResource resource = new ClassPathResource("firebase-service-account.json");
+            options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(resource.getInputStream()))
+                    .build();
+        }
 
-        // 3) Initialize the default FirebaseApp instance, if not already initialized
+        // 3) Initialize app once
         if (FirebaseApp.getApps().isEmpty()) {
             return FirebaseApp.initializeApp(options);
         } else {
